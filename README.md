@@ -1,11 +1,11 @@
 # DHT11 Python library for Pycom
 
-This simple class can be used for reading temperature and humidity values from DHT11 sensor on Pycom Board.
+This simple class can be used for reading temperature and humidity values from DHT11 sensor on Pycom Board. Thanks to szazo for the original source code.
 
 # Usage
 
 1. Instantiate the `DHT11` class with the pin number as constructor parameter.
-2. Call `read()` method, which will return `DHT11Result` object with actual values and error code.
+2. Call `read()` method, which will return `DHT11Result` object with actual values and error code. 
 
 For example:
 
