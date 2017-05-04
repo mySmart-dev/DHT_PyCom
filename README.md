@@ -10,24 +10,20 @@ This simple class can be used for reading temperature and humidity values from D
 For example:
 
 ```python
-import RPi.GPIO as GPIO
-import dht11
+import pycom
+import time
+from machine import Pin
+from dth import DTH11
 
-# initialize GPIO
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.cleanup()
-
-# read data using pin 14
-instance = dht11.DHT11(pin = 14)
-result = instance.read()
-
+pycom.heartbeat(False)
+pycom.rgbled(0x000008) # blue
+th = DTH11(Pin('P3', mode=Pin.OPEN_DRAIN))
+time.sleep(2)
+result = th.read()
 if result.is_valid():
+    pycom.rgbled(0x001000) # green
     print("Temperature: %d C" % result.temperature)
     print("Humidity: %d %%" % result.humidity)
-else:
-    print("Error: %d" % result.error_code)
-```
 
 For working example, see `dht11_example.py` (you probably need to adjust pin for your configuration)
 
