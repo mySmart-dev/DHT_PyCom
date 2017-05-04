@@ -1,21 +1,14 @@
-import RPi.GPIO as GPIO
-import dht11
+import pycom
 import time
-import datetime
+from machine import Pin
+from dth import DTH11
 
-# initialize GPIO
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.cleanup()
-
-# read data using pin 14
-instance = dht11.DHT11(pin=14)
-
-while True:
-    result = instance.read()
-    if result.is_valid():
-        print("Last valid input: " + str(datetime.datetime.now()))
-        print("Temperature: %d C" % result.temperature)
-        print("Humidity: %d %%" % result.humidity)
-
-    time.sleep(1)
+pycom.heartbeat(False)
+pycom.rgbled(0x000008) # blue
+th = DTH11(Pin('P3', mode=Pin.OPEN_DRAIN))
+time.sleep(2)
+result = th.read()
+if result.is_valid():
+    pycom.rgbled(0x001000) # green
+    print("Temperature: %d C" % result.temperature)
+    print("Humidity: %d %%" % result.humidity)
