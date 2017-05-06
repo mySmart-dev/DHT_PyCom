@@ -2,8 +2,8 @@ import time
 from machine import enable_irq, disable_irq,  Pin
 
 
-class DTH11Result:
-    'DHT11 sensor result returned by DHT11.read() method'
+class DTHResult:
+    'DHT sensor result returned by DHT.read() method'
 
     ERR_NO_ERROR = 0
     ERR_MISSING_DATA = 1
@@ -19,31 +19,27 @@ class DTH11Result:
         self.humidity = humidity
 
     def is_valid(self):
-        return self.error_code == DTH11Result.ERR_NO_ERROR
+        return self.error_code == DTHResult.ERR_NO_ERROR
 
 
-class DTH11:
-    'DHT11 sensor reader class for Pycom ESP32 board ex : SiPy'
+class DTH:
+    'DHT sensor (dht11, dht21,dht22) reader class for Pycom'
 
     __pin = Pin('P3', mode=Pin.OPEN_DRAIN)
+    __dhttype = 0
 
-    def __init__(self, pin):
+    def __init__(self, pin, sensor=0):
         self.__pin = pin
+        self.__dhttype = sensor
 
     def read(self):
         time.sleep(1)
-        self.__pin=Pin('P3', mode=Pin.OPEN_DRAIN)
-#        RPi.GPIO.setup(self.__pin, RPi.GPIO.OUT)
 
         # send initial high
         self.__send_and_sleep(1, 0.025)
 
         # pull down to low
         self.__send_and_sleep(0, 0.04)
-
-        # change to input using pull up
-        #RPi.GPIO.setup(self.__pin, RPi.GPIO.IN, RPi.GPIO.PUD_UP)
-
 
         # collect data into an array
         data = self.__collect_input()
@@ -53,7 +49,7 @@ class DTH11:
         # if bit count mismatch, return error (4 byte data + 1 byte checksum)
         #print(pull_up_lengths)
         if len(pull_up_lengths) != 40:
-            return DTH11Result(DTH11Result.ERR_MISSING_DATA, 0, 0)
+            return DTHResult(DTHResult.ERR_MISSING_DATA, 0, 0)
 
         # calculate bits from lengths of the pull up periods
         bits = self.__calculate_bits(pull_up_lengths)
@@ -64,10 +60,19 @@ class DTH11:
         # calculate checksum and check
         checksum = self.__calculate_checksum(the_bytes)
         if the_bytes[4] != checksum:
-            return DTH11Result(DTH11Result.ERR_CRC, 0, 0)
+            return DTHResult(DTHResult.ERR_CRC, 0, 0)
 
         # ok, we have valid data, return it
-        return DTH11Result(DTH11Result.ERR_NO_ERROR, the_bytes[2], the_bytes[0])
+        [int_rh, dec_rh, int_t, dec_t, csum] = the_bytes
+        if self.__dhttype==0:		#dht11
+        	rh = int_rh 		#dht11 20% ~ 90%
+        	t = int_t 	#dht11 0..50°C
+        else:			#dht21,dht22
+        	rh = ((int_rh * 256) + dec_rh)/10
+        	t = (((int_t & 0x7F) * 256) + dec_t)/10
+        	if (int_t & 0x80) > 0:
+        		t *= -1
+        return DTHResult(DTHResult.ERR_NO_ERROR, t, rh)
 
     def __send_and_sleep(self, output, mysleep):
         self.__pin(output)
@@ -193,7 +198,7 @@ class DTH11:
             if ((i + 1) % 8 == 0):
                 the_bytes.append(byte)
                 byte = 0
-
+        #print(the_bytes)
         return the_bytes
 
     def __calculate_checksum(self, the_bytes):
