@@ -17,7 +17,7 @@ from dth import DTH
 
 pycom.heartbeat(False)
 pycom.rgbled(0x000008) # blue
-th = DTH11(Pin('P3', mode=Pin.OPEN_DRAIN))
+th = DTH(Pin('P3', mode=Pin.OPEN_DRAIN),0)
 time.sleep(2)
 result = th.read()
 if result.is_valid():
