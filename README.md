@@ -4,8 +4,8 @@ This simple class can be used for reading temperature and humidity values from D
 
 # Usage
 
-1. Instantiate the `DHT` class with the pin number and type of sensor (0=DTH11, 1=DTH22° as constructor parameters.
-2. Call `read()` method, which will return `DHT11Result` object with actual values and error code. 
+1. Instantiate the `DHT` class with the pin number and type of sensor (0=DTH11, 1=DTH22) as constructor parameters.
+2. Call `read()` method, which will return `DHTResult` object with actual values and error code. 
 
 For example:
 
