@@ -1,4 +1,4 @@
-# DHT pure Python library for Pycom (sensor DTH11 , DTH22)
+# DHT pure Python library for Pycom board (sensors DTH11 , DTH22)
 
 This simple class can be used for reading temperature and humidity values from DHT11 and DTH22 sensors on Pycom Board. Thanks to szazo for the original source code.
 
