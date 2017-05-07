@@ -31,12 +31,15 @@ class DTH:
     def __init__(self, pin, sensor=0):
         self.__pin = pin
         self.__dhttype = sensor
+        self.__pin(1)
+        time.sleep(0.5)
+
 
     def read(self):
         time.sleep(1)
 
         # send initial high
-        self.__send_and_sleep(1, 0.025)
+        #self.__send_and_sleep(1, 0.025)
 
         # pull down to low
         self.__send_and_sleep(0, 0.020)
@@ -86,7 +89,7 @@ class DTH:
         max_unchanged_count = 100
         last = -1
         data = []
-        m = [1]*800        # needs long sample size to grab all the bits from the DHT
+        m = bytearray(800)        # needs long sample size to grab all the bits from the DHT
         irqf = disable_irq()
         self.__pin(1)
         for i in range(len(m)):
