@@ -39,15 +39,16 @@ class DTH:
         self.__send_and_sleep(1, 0.025)
 
         # pull down to low
-        self.__send_and_sleep(0, 0.04)
+        self.__send_and_sleep(0, 0.020)
 
         # collect data into an array
         data = self.__collect_input()
-
+        #print(data)
         # parse lengths of all data pull up periods
         pull_up_lengths = self.__parse_data_pull_up_lengths(data)
         # if bit count mismatch, return error (4 byte data + 1 byte checksum)
         #print(pull_up_lengths)
+        #print(len(pull_up_lengths))
         if len(pull_up_lengths) != 40:
             return DTHResult(DTHResult.ERR_MISSING_DATA, 0, 0)
 
@@ -85,7 +86,7 @@ class DTH:
         max_unchanged_count = 100
         last = -1
         data = []
-        m = [1]*300        # needs long sample size to grab all the bits from the DHT
+        m = [1]*800        # needs long sample size to grab all the bits from the DHT
         irqf = disable_irq()
         self.__pin(1)
         for i in range(len(m)):
