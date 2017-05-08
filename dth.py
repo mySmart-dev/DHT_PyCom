@@ -42,7 +42,7 @@ class DTH:
         #self.__send_and_sleep(1, 0.025)
 
         # pull down to low
-        self.__send_and_sleep(0, 0.020)
+        self.__send_and_sleep(0, 0.019)
 
         # collect data into an array
         data = self.__collect_input()
