@@ -1,6 +1,6 @@
-# DHT Pure Python library for Pycom board 
+# DHT Pure Python library for Pycom board using new function pulses_get
 
-This simple class can be used for reading temperature and humidity values from DHT11 and DTH22 sensors on Pycom Board. Thanks to szazo for the original source code.
+This simple class can be used for reading temperature and humidity values from DHT11 and DTH22 sensors on Pycom Board. Thanks to szazo for the original source code. 
 
 # Usage
 
@@ -17,7 +17,7 @@ from dth import DTH
 
 pycom.heartbeat(False)
 pycom.rgbled(0x000008) # blue
-th = DTH(Pin('P3', mode=Pin.OPEN_DRAIN),0)
+th = DTH('P3',0)
 time.sleep(2)
 result = th.read()
 if result.is_valid():
