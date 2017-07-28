@@ -1,6 +1,6 @@
 import time
+import pycom
 from machine import enable_irq, disable_irq,  Pin
-
 
 class DTHResult:
     'DHT sensor result returned by DHT.read() method'
