@@ -1,10 +1,10 @@
 # DHT Pure Python library for Pycom board 
 
-This simple class can be used for reading temperature and humidity values from DHT11 and DTH22 sensors on Pycom Board. Thanks to szazo for the original source code.
+This simple class can be used for reading temperature and humidity values from DHT11 and DHT22 sensors on Pycom Board. Thanks to szazo for the original source code.
 
-# Usage
+## Usage
 
-1. Instantiate the `DHT` class with the pin number and type of sensor (0=DTH11, 1=DTH22) as constructor parameters.
+1. Instantiate the `DHT` class with the pin number and type of sensor (0=DHT11, 1=DHT22) as constructor parameters.
 2. Call `read()` method, which will return `DHTResult` object with actual values and error code. 
 
 For example:
@@ -13,21 +13,22 @@ For example:
 import pycom
 import time
 from machine import Pin
-from dth import DTH
+from dht import DHT
 
 pycom.heartbeat(False)
 pycom.rgbled(0x000008) # blue
-th = DTH(Pin('P3', mode=Pin.OPEN_DRAIN),0)
+th = DHT(Pin('P3', mode = Pin.OPEN_DRAIN),0)
 time.sleep(2)
 result = th.read()
 if result.is_valid():
     pycom.rgbled(0x001000) # green
     print("Temperature: %d C" % result.temperature)
     print("Humidity: %d %%" % result.humidity)
+```
 
 For working example, see `dht11_example.py` (you probably need to adjust pin for your configuration)
 
 
-# License
+## License
 
 This project is licensed under the terms of the MIT license.
